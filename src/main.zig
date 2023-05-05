@@ -21,8 +21,8 @@ pub fn main() !void {
     }
 
     var program = try std.fs.cwd().openFile(args[1], .{});
-    const program_reader = program.reader();
     defer program.close();
+    const program_reader = program.reader();
 
     const max_memory = std.math.maxInt(u8) + 1;
     const program_size = (try program.metadata()).size();
