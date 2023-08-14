@@ -17,7 +17,7 @@ pub const powers_of_2: [9]f16 = init: {
     var initial_value: [9]f16 = undefined;
 
     for (&initial_value, 0..) |*item, exponent| {
-        item.* = @intToFloat(f16, 1 << exponent);
+        item.* = @floatFromInt(1 << exponent);
         // item.* = @bitCast(
         //     f16,
         //     0x3c00 // all but the highest exponent bit in f16, 1.0
@@ -31,9 +31,9 @@ pub const powers_of_2: [9]f16 = init: {
 /// assumes `a` is in the range [0, 256)
 /// return value is in the range [0, 128)
 pub fn rightShift1(a: f16) f16 {
-    const scale = @bitCast(f16, @as(u16, 0x37fa)); // 0.4985...
+    const scale: f16 = @bitCast(@as(u16, 0x37fa)); // 0.4985...
 
-    const offset = @bitCast(f16, @as(u16, 0x66cd)); // 1741.0
+    const offset: f16 = @bitCast(@as(u16, 0x66cd)); // 1741.0
 
     return a * scale + offset - offset;
 }
@@ -41,11 +41,11 @@ pub fn rightShift1(a: f16) f16 {
 /// assumes `a` is in the range [0, 256)
 /// return value is the range [0, 1]
 pub fn rightShift2(a: f16) f16 {
-    const scale = @bitCast(f16, @as(u16, 0x3400)); // 1/4
+    const scale: f16 = @bitCast(@as(u16, 0x3400)); // 1/4
 
     // magic numbers taken from Murphy 2023
-    const offset1 = @bitCast(f16, @as(u16, 0xb54e)); // -0.331...
-    const offset2 = @bitCast(f16, @as(u16, 0x6417)); // 1047.0
+    const offset1: f16 = @bitCast(@as(u16, 0xb54e)); // -0.331...
+    const offset2: f16 = @bitCast(@as(u16, 0x6417)); // 1047.0
 
     return a * scale + offset1 + offset2 - offset2;
 }
@@ -53,11 +53,11 @@ pub fn rightShift2(a: f16) f16 {
 /// assumes `a` is in the range [0, 256)
 /// return value is the range [0, 1]
 pub fn rightShift3(a: f16) f16 {
-    const scale = @bitCast(f16, @as(u16, 0x3000)); // 1/8
+    const scale: f16 = @bitCast(@as(u16, 0x3000)); // 1/8
 
     // magic numbers taken from Murphy 2023
-    const offset1 = @bitCast(f16, @as(u16, 0xb642)); // -0.391...
-    const offset2 = @bitCast(f16, @as(u16, 0x67bc)); // 1980
+    const offset1: f16 = @bitCast(@as(u16, 0xb642)); // -0.391...
+    const offset2: f16 = @bitCast(@as(u16, 0x67bc)); // 1980
 
     return a * scale + offset1 + offset2 - offset2;
 }
@@ -65,11 +65,11 @@ pub fn rightShift3(a: f16) f16 {
 /// assumes `a` in the range [0, 256)
 /// return value is the range [0, 1]
 pub fn rightShift4(a: f16) f16 {
-    const scale = @bitCast(f16, @as(u16, 0x2c00)); // 1/16
+    const scale: f16 = @bitCast(@as(u16, 0x2c00)); // 1/16
 
     // magic numbers taken from Murphy 2023
-    const offset1 = @bitCast(f16, @as(u16, 0x37b5)); // 0.481...
-    const offset2 = @bitCast(f16, @as(u16, 0x6630)); // 1584.0
+    const offset1: f16 = @bitCast(@as(u16, 0x37b5)); // 0.481...
+    const offset2: f16 = @bitCast(@as(u16, 0x6630)); // 1584.0
 
     return (a * scale - offset1) + offset2 - offset2;
 }
@@ -77,9 +77,9 @@ pub fn rightShift4(a: f16) f16 {
 /// assumes `a` is in the range [0, 256)
 /// return value is in the range [0, 1]
 pub fn rightShift7(a: f16) f16 {
-    const scale = @bitCast(f16, @as(u16, 0x1c03)); // 0.0039...
+    const scale: f16 = @bitCast(@as(u16, 0x1c03)); // 0.0039...
 
-    const offset = @bitCast(f16, @as(u16, 0x66c8)); // 1736.0
+    const offset: f16 = @bitCast(@as(u16, 0x66c8)); // 1736.0
 
     return a * scale + offset - offset;
 }
@@ -87,11 +87,11 @@ pub fn rightShift7(a: f16) f16 {
 /// assumes `a` is in the range [0, 512)
 /// return value is the range [0, 1]
 pub fn rightShift8(a: f16) f16 {
-    const scale = @bitCast(f16, @as(u16, 0x1c00)); // 1/256
+    const scale: f16 = @bitCast(@as(u16, 0x1c00)); // 1/256
 
     // magic numbers taken from Murphy 2023
-    const offset1 = @bitCast(f16, @as(u16, 0xb7f6)); // -0.497...
-    const offset2 = @bitCast(f16, @as(u16, 0x66b0)); // 1712.0
+    const offset1: f16 = @bitCast(@as(u16, 0xb7f6)); // -0.497...
+    const offset2: f16 = @bitCast(@as(u16, 0x66b0)); // 1712.0
 
     return a * scale + offset1 + offset2 - offset2;
 }
@@ -258,14 +258,14 @@ pub fn ifCond(condition: f16, a: f16) f16 {
     // if you add and subtract all of these from a hfluint8 then
     // the lower 6 bits are cleared due to rounding
     const off = [8]f16{
-        @bitCast(f16, @as(u16, 0x77f9)),
-        @bitCast(f16, @as(u16, 0x7829)),
-        @bitCast(f16, @as(u16, 0x77fb)),
-        @bitCast(f16, @as(u16, 0x78e2)),
-        @bitCast(f16, @as(u16, 0x77fd)),
-        @bitCast(f16, @as(u16, 0x780b)),
-        @bitCast(f16, @as(u16, 0x77ff)),
-        @bitCast(f16, @as(u16, 0x7864)),
+        @bitCast(@as(u16, 0x77f9)),
+        @bitCast(@as(u16, 0x7829)),
+        @bitCast(@as(u16, 0x77fb)),
+        @bitCast(@as(u16, 0x78e2)),
+        @bitCast(@as(u16, 0x77fd)),
+        @bitCast(@as(u16, 0x780b)),
+        @bitCast(@as(u16, 0x77ff)),
+        @bitCast(@as(u16, 0x7864)),
     };
 
     var mutable_a = a;

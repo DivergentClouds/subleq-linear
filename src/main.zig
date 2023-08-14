@@ -36,7 +36,7 @@ pub fn main() !void {
     var memory: [max_memory]f16 = undefined;
 
     for (0..program_size) |i| {
-        memory[i] = @intToFloat(f16, try program_reader.readByte());
+        memory[i] = @floatFromInt(try program_reader.readByte());
     }
 
     var iterations: ?usize = null;
@@ -64,13 +64,13 @@ pub fn main() !void {
 
 fn subleq(memory: []f16, program_counter: f16) f16 { // void {
     // while (true) {
-    const a = memory[@floatToInt(usize, program_counter)];
-    const b = memory[@floatToInt(usize, half.addMod256(program_counter, 1.0))];
-    const c = memory[@floatToInt(usize, half.addMod256(program_counter, 2.0))];
+    const a = memory[@intFromFloat(program_counter)];
+    const b = memory[@intFromFloat(half.addMod256(program_counter, 1.0))];
+    const c = memory[@intFromFloat(half.addMod256(program_counter, 2.0))];
 
-    const sub = half.subMod256(memory[@floatToInt(usize, b)], memory[@floatToInt(usize, a)]);
+    const sub = half.subMod256(memory[@as(usize, @intFromFloat(b))], memory[@as(usize, @intFromFloat(a))]);
 
-    memory[@floatToInt(usize, b)] = sub;
+    memory[@intFromFloat(b)] = sub;
 
     const leq = half.booleanOr(half.isSigned(sub), half.isZero(sub));
     // program_counter =
@@ -88,6 +88,6 @@ fn outputMemory(memory: []f16, filename: ?[]u8) !void {
     const outfile_writer = outfile.writer();
 
     for (memory) |item| {
-        try outfile_writer.writeByte(@floatToInt(u8, item));
+        try outfile_writer.writeByte(@intFromFloat(item));
     }
 }
