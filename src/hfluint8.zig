@@ -137,7 +137,7 @@ pub fn leftShift3(a: f16) f16 {
 /// `a` and `b` must be in the range [0, 256)
 /// return value is in the range [0, 256)
 pub fn addMod256(a: f16, b: f16) f16 {
-    const scale = @as(f16, 256); // 256.0
+    const scale: f16 = 256; // 256.0
 
     const sum = a + b;
     const overflow = rightShift8(sum);
@@ -184,7 +184,7 @@ pub fn booleanNot(a: f16) f16 {
 /// `a` and `b` must be in the range [0, 256)
 /// return value is in the range [0, 256)
 pub fn bitwiseAnd(a: f16, b: f16) f16 {
-    var result = @as(f16, 0); // 0.0
+    var result: f16 = 0; // 0.0
     var a_mutable = a;
     var b_mutable = b;
 
@@ -274,7 +274,7 @@ pub fn ifCond(condition: f16, a: f16) f16 {
     const not_condition = booleanNot(condition);
 
     // 128 if condition is false
-    const conditional_128 = @as(f16, 128) * not_condition;
+    const conditional_128: f16 = @as(f16, 128) * not_condition;
 
     var conditional_off: [8]f16 = undefined;
 
