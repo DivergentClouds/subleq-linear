@@ -51,7 +51,7 @@ pub fn main() !void {
     }
 
     var program_counter: f16 = 0;
-    while (iterations orelse 1 > 0) : ({
+    while ((iterations orelse 1) > 0) : ({
         if (iterations) |_| {
             iterations.? -= 1;
         }
@@ -63,7 +63,6 @@ pub fn main() !void {
 }
 
 fn subleq(memory: []f16, program_counter: f16) f16 { // void {
-    // while (true) {
     const a = memory[@intFromFloat(program_counter)];
     const b = memory[@intFromFloat(half.addMod256(program_counter, 1.0))];
     const c = memory[@intFromFloat(half.addMod256(program_counter, 2.0))];
@@ -73,14 +72,10 @@ fn subleq(memory: []f16, program_counter: f16) f16 { // void {
     memory[@intFromFloat(b)] = sub;
 
     const leq = half.booleanOr(half.isSigned(sub), half.isZero(sub));
-    // program_counter =
     return half.ifCond(
         half.booleanNot(leq),
         half.addMod256(program_counter, 3),
     ) + half.ifCond(leq, c);
-    // }
-
-    // return program_counter;
 }
 
 fn outputMemory(memory: []f16, filename: ?[]u8) !void {
