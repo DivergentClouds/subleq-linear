@@ -5,7 +5,7 @@ Also contains a hfluint8 implimentation.
 
 Dependencies:
 - zig
- - Built on 0.14.0
+ - Built on 0.14.1
 
 Instructions:
 $ zig build -Doptimize=ReleaseSafe
