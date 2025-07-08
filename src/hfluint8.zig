@@ -18,12 +18,6 @@ pub const powers_of_2: [9]f16 = init: {
 
     for (&initial_value, 0..) |*item, exponent| {
         item.* = @floatFromInt(1 << exponent);
-        // item.* = @bitCast(
-        //     f16,
-        //     0x3c00 // all but the highest exponent bit in f16, 1.0
-        //     + 0x400 // lowest exponent bit in f16
-        //     * @as(u16, exponent),
-        // );
     }
     break :init initial_value;
 };
